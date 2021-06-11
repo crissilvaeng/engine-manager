@@ -4,4 +4,4 @@ USER root
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN sudo apt-get update && sudo apt-get install -y redis-server && sudo rm -rf /var/lib/apt
+RUN sudo apt-get update && sudo rm -rf /var/lib/apt
