@@ -19,17 +19,10 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            apps:auto-renew ${{ github.event.repository.name }}
-      - uses: appleboy/ssh-action@master
-        if: ${{ failure() }}
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            letsencrypt:enable ${{ github.event.repository.name }}
+            apps:create ${{ github.event.repository.name }}
       - name: Dokku docker-options
         uses: appleboy/ssh-action@master
+        if: ${{ always() }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
