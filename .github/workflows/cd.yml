@@ -13,7 +13,22 @@ jobs:
     name: ⚙️ Configure
     runs-on: ubuntu-latest
     steps:
-      - name: 🐳 Dokku docker-options
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            apps:auto-renew ${{ github.event.repository.name }}
+      - uses: appleboy/ssh-action@master
+        if: ${{ failure() }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            letsencrypt:enable ${{ github.event.repository.name }}
+      - name: Dokku docker-options
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -21,7 +36,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
-      - name: 🐳 Dokku config
+      - name: Dokku config
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -54,4 +69,12 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            letsencrypt:enable ${{ github.event.repository.name }} NATS_URL=$NATS_URL --no-restart
+            letsencrypt:auto-renew ${{ github.event.repository.name }}
+      - uses: appleboy/ssh-action@master
+        if: ${{ failure() }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            letsencrypt:enable ${{ github.event.repository.name }}
