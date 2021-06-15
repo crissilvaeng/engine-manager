@@ -1,17 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+import { CreateEngineCommand } from './commands/create-engine.command';
 import { CreateEngineDto } from './dto/create-engine.dto';
-import { Engine, EngineDocument } from './entities/engine.entity';
+import { Injectable } from '@nestjs/common';
+import { ListEnginesQuery } from './queries/list-engines.query';
 
 @Injectable()
 export class EnginesService {
   constructor(
-    @InjectModel(Engine.name)
-    private readonly engineModel: Model<EngineDocument>,
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
 
-  create(createEngineDto: CreateEngineDto) {
-    return this.engineModel.create({ ...createEngineDto });
+  async createEngine(createEngineDto: CreateEngineDto) {
+    return this.commandBus.execute(
+      new CreateEngineCommand(createEngineDto.image),
+    );
+  }
+
+  async listEngines() {
+    return this.queryBus.execute(new ListEnginesQuery());
   }
 }

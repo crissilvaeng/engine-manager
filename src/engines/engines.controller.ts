@@ -1,18 +1,19 @@
-import {
-  Controller,
-  Post,
-  Body,
-} from '@nestjs/common';
-import { EnginesService } from './engines.service';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CreateEngineDto } from './dto/create-engine.dto';
+import { EngineDto } from './dto/engine.dto';
+import { EnginesService } from './engines.service';
 
 @Controller('engines')
 export class EnginesController {
-  constructor(private readonly enginesService: EnginesService) {}
+  constructor(private readonly service: EnginesService) {}
 
   @Post()
   async create(@Body() createEngineDto: CreateEngineDto) {
-    const engine = await this.enginesService.create(createEngineDto);
-    return { id: engine._id, image: engine.image }
+    return this.service.createEngine(createEngineDto);
+  }
+
+  @Get()
+  async getAll(): Promise<EngineDto[]> {
+    return await this.service.listEngines();
   }
 }

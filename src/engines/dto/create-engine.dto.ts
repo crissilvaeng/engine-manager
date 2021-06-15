@@ -1,7 +1,4 @@
-import { IsString } from 'class-validator';
+import { EngineDto } from './engine.dto';
+import { OmitType } from '@nestjs/swagger';
 
-export class CreateEngineDto {
-
-  @IsString()
-  image: string;
-}
+export class CreateEngineDto extends OmitType(EngineDto, ['_id'] as const) {}
