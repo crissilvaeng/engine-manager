@@ -19,8 +19,9 @@ export class DockerService {
     await this.docker.pull(image);
     return this.docker.run(image, options.command, null, {
       Env: options.env,
+      Cmd: options.command,
       Labels: { yifan: 'player' },
-      NetworkMode: 'host'
+      HostConfig: { NetworkMode: 'host' },
     });
   }
 
