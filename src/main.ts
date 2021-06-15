@@ -2,6 +2,7 @@ import * as compression from 'compression';
 import * as helmet from 'helmet';
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app.module';
 import Case from 'case';
@@ -10,6 +11,13 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.NATS,
+    options: {
+      url: process.env.NATS_URL,
+    },
+  });
 
   app.use(compression());
   app.use(helmet());
@@ -28,6 +36,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(process.env.PORT);
+  await app.startAllMicroservicesAsync();
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

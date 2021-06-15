@@ -1,7 +1,7 @@
 {
   "name": "engine-manager",
   "description": "Service that manages the lifecycle of an engine and its containers.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "index.js",
   "repository": "https://github.com/yifan-ca/yifan-microservice-boilerplate.git",
   "author": "Cristina Silva <crissilva.eng@gmail.com>",
@@ -20,7 +20,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "release": "standard-version --release-as minor",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:major": "standard-version --release-as major"
   },
   "dependencies": {
     "@nestjs/bull": "^0.3.1",
@@ -75,6 +79,7 @@
     "husky": "^6.0.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
+    "standard-version": "^9.3.0",
     "supertest": "^6.1.3",
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.0.18",
