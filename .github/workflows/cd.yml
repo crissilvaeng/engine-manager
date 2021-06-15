@@ -24,15 +24,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
-      - name: nats:linked
-        continue-on-error: true
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            nats:linked ${{ secrets.NATS_SERVICE }} ${{ github.event.repository.name }}
       - name: nats:link
         if: ${{ failure() }}
         uses: appleboy/ssh-action@master
