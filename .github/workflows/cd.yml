@@ -31,6 +31,7 @@ jobs:
           script: |
             docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
       - name: nats:linked
+        continue-on-error: true
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -67,6 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: letsencrypt:auto-renew
+        continue-on-error: true
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -75,8 +77,8 @@ jobs:
           script: |
             letsencrypt:auto-renew ${{ github.event.repository.name }} | grep -q ${{ github.event.repository.name }}
       - name: letsencrypt:enable
-        uses: appleboy/ssh-action@master
         if: ${{ failure() }}
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
