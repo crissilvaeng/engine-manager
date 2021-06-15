@@ -1,0 +1,57 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pre-deploy:
+    name: ⚙️ Configure
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐳 Dokku docker-options
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
+      - name: 🐳 Dokku config
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            config:set --no-restart ${{ github.event.repository.name }} NATS_URL=${{ secrets.NATS_SERVICE }}
+
+  deploy:
+    name: 🚀 Deploy
+    needs: pre-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  post-deploy:
+    name: 🔐 SSL
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            letsencrypt:enable ${{ github.event.repository.name }} NATS_URL=$NATS_URL --no-restart

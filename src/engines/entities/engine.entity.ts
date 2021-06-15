@@ -1,51 +1,14 @@
-import { Exclude, Expose } from 'class-transformer';
-import * as moment from 'moment';
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Exclude()
-@Table({
-  timestamps: true,
-  paranoid: true,
-  version: true,
-  getterMethods: {
-    timestamp() {
-      return moment().unix();
-    },
-  },
-})
-export class Engine extends Model {
-  @Column({
-    type: DataType.UUID,
-    primaryKey: true,
-    defaultValue: DataType.UUIDV4,
-  })
-  id: string;
+export type EngineDocument = Engine & Document;
 
-  @Expose()
-  @Column({
-    type: DataType.STRING,
-    unique: true,
+@Schema()
+export class Engine {
+  @Prop({
+    type: String,
+    required: true,
   })
-  slug: string;
-
-  @Expose()
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name: string;
-
-  @Expose()
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  description: string;
-
-  @Expose()
-  @Column({
-    type: DataType.DECIMAL(10, 2),
-    allowNull: true,
-  })
-  version: number;
+  image: string;
 }
+
+export const EngineSchema = SchemaFactory.createForClass(Engine);
