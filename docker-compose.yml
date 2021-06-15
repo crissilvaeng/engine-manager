@@ -9,3 +9,7 @@ services:
     image: mongo:latest
     ports:
       - 27017:27017
+  nats:
+    image: nats:latest
+    ports:
+      - 4222:4222
