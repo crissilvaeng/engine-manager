@@ -13,7 +13,8 @@ jobs:
     name: ⚙️ Configure
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@master
+      - name: dokku app:create
+        uses: appleboy/ssh-action@master
         continue-on-error: true
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -21,21 +22,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             apps:create ${{ github.event.repository.name }}
-      - uses: appleboy/ssh-action@master
+      - name: dokku docker-options:add
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
-      - uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            config:set --no-restart ${{ github.event.repository.name }} NATS_URL=${{ secrets.NATS_SERVICE }}
-      - uses: appleboy/ssh-action@master
+      - name: dokku nats:link
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -61,14 +57,16 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@master
+      - name: dokku letsencrypt:auto-renew
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             letsencrypt:auto-renew ${{ github.event.repository.name }} | grep -q ${{ github.event.repository.name }}
-      - uses: appleboy/ssh-action@master
+      - name: dokku letsencrypt:enable
+        uses: appleboy/ssh-action@master
         if: ${{ failure() }}
         with:
           host: ${{ secrets.SSH_HOST }}
