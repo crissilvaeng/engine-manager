@@ -17,9 +17,10 @@ export class DockerService {
 
   async run(image, options: RunOptions) {
     await this.docker.pull(image);
-    return this.docker.run(image, options.command, process.stdout, {
+    return this.docker.run(image, options.command, null, {
       Env: options.env,
       Labels: { yifan: 'player' },
+      NetworkMode: 'host'
     });
   }
 
