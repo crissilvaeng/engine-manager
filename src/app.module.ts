@@ -23,7 +23,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       limit: 10,
     }),
     ConfigModule.forRoot({
-      envFilePath: '.development.env',
+      envFilePath: ['.env', '.development.env'],
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
