@@ -25,6 +25,7 @@ jobs:
           script: |
             docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
       - name: nats:link
+        continue-on-error: true
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
