@@ -21,7 +21,6 @@ export class EngineRunWorker
   async execute(@Payload() game: Game): Promise<any> {
     return await Promise.all([game.white, game.black].map(player => {
       this.docker.run(player, {
-        command: ['yarn', 'start'],
         env: [
           `NATS_URL=${this.config.get('ENGINES_NATS_URL')}`,
           `NATS_SUBJECT=games.*.${player.replace(/[^a-zA-Z0-9]/, '-')}`,
