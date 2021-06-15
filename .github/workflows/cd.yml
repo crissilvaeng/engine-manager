@@ -75,7 +75,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            letsencrypt:auto-renew ${{ github.event.repository.name }} | grep -q ${{ github.event.repository.name }}
+            letsencrypt:list | grep -q ${{ github.event.repository.name }}
       - name: letsencrypt:enable
         if: ${{ failure() }}
         uses: appleboy/ssh-action@master
