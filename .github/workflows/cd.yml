@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@master
+        continue-on-error: true
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -22,7 +23,6 @@ jobs:
             apps:create ${{ github.event.repository.name }}
       - name: Dokku docker-options
         uses: appleboy/ssh-action@master
-        if: ${{ always() }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
