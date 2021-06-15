@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/yifan-ca/yifan-microservice-boilerplate/compare/v0.2.0...v0.3.0) (2021-06-15)
+
+
+### Features
+
+* adds nats microservice to engine0manager ([b82fc65](https://github.com/yifan-ca/yifan-microservice-boilerplate/commit/b82fc65d065d1184805e56b76e571862384005d1))
+* force issue ssl certificate when do not exists ([6dfb61e](https://github.com/yifan-ca/yifan-microservice-boilerplate/commit/6dfb61e3b86c1adbc58ae364000da8da41e592bd))
+* use nats plugin link to manage comminication between services ([6a7fc9d](https://github.com/yifan-ca/yifan-microservice-boilerplate/commit/6a7fc9d568d71404ca614770c5cd5cf4c33281c7))
+* use nats plugin link to manage comminication between services ([30c0fd9](https://github.com/yifan-ca/yifan-microservice-boilerplate/commit/30c0fd99768bcaf10a16c968d449e2adac17090b))
+
+
+### Bug Fixes
+
+* add updated yarn lockfile to unlock pipeline ([1c1a7fd](https://github.com/yifan-ca/yifan-microservice-boilerplate/commit/1c1a7fd78859b00af03e7f57ce8f889a3487a0eb))
+* adds nats link only if not exists ([a3733f7](https://github.com/yifan-ca/yifan-microservice-boilerplate/commit/a3733f7f94eec6d68947a8c20528c3a816cf9754))
+* remove unecessary config:set for NATS_URL ([b884fce](https://github.com/yifan-ca/yifan-microservice-boilerplate/commit/b884fcef4ed3451b8bda9de73c35cef4a5297e03))
+
 ## 0.2.0 (2021-06-15)
 
 
