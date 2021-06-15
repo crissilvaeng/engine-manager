@@ -37,6 +37,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             config:set --no-restart ${{ github.event.repository.name }} NATS_URL=${{ secrets.NATS_SERVICE }}
+      - name: Dokku config
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            nats:link ${{ secrets.NATS_SERVICE }} ${{ github.event.repository.name }}
 
   deploy:
     name: 🚀 Deploy
