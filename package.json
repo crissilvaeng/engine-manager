@@ -1,7 +1,7 @@
 {
   "name": "engine-manager",
   "description": "Service that manages the lifecycle of an engine and its containers.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "index.js",
   "repository": "https://github.com/yifan-ca/yifan-microservice-boilerplate.git",
   "author": "Cristina Silva <crissilva.eng@gmail.com>",
