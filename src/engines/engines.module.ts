@@ -11,11 +11,9 @@ import { TasksModule } from '../tasks/tasks.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Engine.name, schema: EngineSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Engine.name, schema: EngineSchema }]),
     TasksModule,
-    DockerModule
+    DockerModule,
   ],
   controllers: [EnginesController, EnginePullWorker, EngineRunWorker],
   providers: [EnginesService],
